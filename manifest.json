@@ -2,21 +2,21 @@
   "name": "Gorilla Gang",
   "short_name": "Gorilla",
   "description": "Treino do Edmilson Coach - Seja monstro!",
-  "start_url": "/index.html",
-  "scope": "/",
+  "start_url": "/meutreino/index.html",
+  "scope": "/meutreino/",
   "display": "standalone",
   "background_color": "#0B0D17",
   "theme_color": "#00FF9D",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "gorilla-192.png",
+      "src": "/meutreino/gorilla-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "gorilla-512.png",
+      "src": "/meutreino/gorilla-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"
@@ -24,7 +24,7 @@
   ],
   "screenshots": [
     {
-      "src": "screenshot1.png",
+      "src": "/meutreino/screenshot1.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
