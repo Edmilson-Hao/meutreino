@@ -6,6 +6,18 @@
   <title>Gorilla Gang - Início</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="gorila.png" type="image/png">
+  <!-- PWA MANIFEST -->
+  <link rel="manifest" href="manifest.json">
+  <!-- ÍCONES APPLE (iOS) -->
+  <link rel="apple-touch-icon" href="gorilla-192.png">
+
+  <!-- TEMA E SPLASH iOS -->
+  <meta name="theme-color" content="#00FF9D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- FORÇA MODO STANDALONE NO IOS -->
+  <meta name="mobile-web-app-capable" content="yes">
 </head>
 <body>
   <div class="container center">
@@ -35,6 +47,15 @@
       proximo = seq[idx];
     }
     document.getElementById("sequenciaAtual").textContent = proximo.toUpperCase();
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Gorilla SW registrado!'))
+            .catch(err => console.log('Erro SW:', err));
+        });
+    }
   </script>
 </body>
 </html>
