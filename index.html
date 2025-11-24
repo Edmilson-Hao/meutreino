@@ -17,14 +17,33 @@
 
 </head>
 <body>
-  
-  <div id="protectedContent" style="display:none;">
-    <div class="container center">
+  <header style="padding:20px; text-align:center; position:relative;">
     <h1>GORILLA GANG</h1>
-    <div class="hoje" id="dataHoje"></div>
+    <div style="color:#778DA9; font-size:1.1rem;" id="dataHoje"></div>
+    
+    <!-- BOTÃO DE LOGOUT -->
+    <button id="logoutBtn" style="
+      position:absolute; top:20px; right:20px;
+      background:#FF6B6B; color:white; border:none;
+      padding:10px 16px; border-radius:50px;
+      font-weight:900; font-size:0.9rem; cursor:pointer;
+      box-shadow:0 0 20px rgba(255,107,107,0.5);
+    ">
+      SAIR
+    </button>
+  </header>
+
+  <div class="container center" style="margin-top:40px;">
+    <div id="userGreeting" style="color:#00FF9D; font-size:1.6rem; margin:20px 0; font-weight:900;"></div>
 
     <div class="menu">
       <a href="treino.html" class="btn-menu">INICIAR TREINO DO DIA</a>
+      
+      <!-- Botão extra só pro Coach -->
+      <a href="coach.html" id="coachAreaBtn" class="btn-menu" style="display:none; background:#FF6B6B;">
+        ÁREA DO COACH
+      </a>
+      
       <a href="historico.html" class="btn-menu secundario">VER HISTÓRICO E PROGRESSÃO</a>
     </div>
 
@@ -32,52 +51,25 @@
       <p>Sequência atual: <strong id="sequenciaAtual">Carregando...</strong></p>
     </div>
   </div>
-  
-    <div class="container center">
-      <h1>GORILLA GANG</h1>
-      <div class="hoje" id="dataHoje"></div>
-      <div class="menu">
-        <a href="treino.html" class="btn-menu">INICIAR TREINO DO DIA</a>
-        <a href="historico.html" class="btn-menu secundario">VER HISTÓRICO E PROGRESSÃO</a>
-      </div>
-      <div class="footer">
-        <p>Sequência atual: <strong id="sequenciaAtual">Carregando...</strong></p>
-      </div>
-    </div>
-
-    <!-- SEU SCRIPT ANTIGO DO INDEX -->
-    <script>
-      // ... seu script antigo aqui ...
-    </script>
-  </div>
 
   <script>
-    // PROTEGE A PÁGINA
-    const user = JSON.parse(localStorage.getItem('gorillaUser') || 'null');
+    // Protege a página
+    const user = JSON.parse(localStorage.getItem('gorillaUser'));
     if (!user) {
       location.href = 'login.html';
     } else {
-      document.getElementById('protectedContent').style.display = 'block';
-      
-      // Mostra nome do aluno no topo (opcional)
-      document.querySelector('h1').insertAdjacentHTML('afterend', 
-        `<p style="color:#00FF9D; margin:10px 0;">Olá, ${user.name.split(' ')[0]}! 💪</p>`
-      );
-
-      // Se for coach, mostra botão extra (exemplo)
+      document.getElementById('userGreeting').textContent = `Olá, ${user.name.split(' ')[0]}!`;
       if (user.role === 'coach') {
-        document.querySelector('.menu').insertAdjacentHTML('afterbegin', 
-          '<a href="coach.html" class="btn-menu" style="background:#FF6B6B;">ÁREA DO COACH</a>'
-        );
+        document.getElementById('coachAreaBtn').style.display = 'block';
       }
     }
-  </script>
 
-  <script>
-    document.getElementById("dataHoje").textContent = new Date().toLocaleDateString('pt-BR', {
+    // Data de hoje
+    document.getElementById('dataHoje').textContent = new Date().toLocaleDateString('pt-BR', {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
 
+    // Sequência atual
     const dados = JSON.parse(localStorage.getItem('treinosGorillaV7') || '{"ultimoCompleto":null}');
     const seq = ["Push", "Pull", "Legs", "Ombro", "Braço"];
     let proximo = seq[0];
@@ -85,24 +77,16 @@
       const idx = (seq.indexOf(dados.ultimoCompleto) + 1) % 5;
       proximo = seq[idx];
     }
-    document.getElementById("sequenciaAtual").textContent = proximo.toUpperCase();
-  </script>
-  
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/meutreino/sw.js', { scope: '/meutreino/' })
-          .then(reg => {
-            console.log('Gorilla SW registrado com sucesso! 🦍 Scope: /meutreino/', reg);
-          })
-          .catch(err => {
-            console.error('Erro no SW (verifique 404):', err);
-          });
-      });
-    }
-  </script>
+    document.getElementById('sequenciaAtual').textContent = proximo.toUpperCase();
 
+    // LOGOUT
+    document.getElementById('logoutBtn').onclick = () => {
+      if (confirm('Sair do Gorilla Gang?')) {
+        localStorage.removeItem('gorillaUser');
+        location.href = 'login.html';
+      }
+    };
+  </script>
 </body>
 
 </html>
-
