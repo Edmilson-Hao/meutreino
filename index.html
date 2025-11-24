@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gorilla Gang - Início</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="gorila.png" type="image/png">
+</head>
+<body>
+  <div class="container center">
+    <h1>GORILLA GANG</h1>
+    <div class="hoje" id="dataHoje"></div>
+
+    <div class="menu">
+      <a href="treino.html" class="btn-menu">INICIAR TREINO DO DIA</a>
+      <a href="historico.html" class="btn-menu secundario">VER HISTÓRICO E PROGRESSÃO</a>
+    </div>
+
+    <div class="footer">
+      <p>Sequência atual: <strong id="sequenciaAtual">Carregando...</strong></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("dataHoje").textContent = new Date().toLocaleDateString('pt-BR', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+
+    const dados = JSON.parse(localStorage.getItem('treinosGorillaV7') || '{"ultimoCompleto":null}');
+    const seq = ["Push", "Pull", "Legs", "Ombro", "Braço"];
+    let proximo = seq[0];
+    if (dados.ultimoCompleto) {
+      const idx = (seq.indexOf(dados.ultimoCompleto) + 1) % 5;
+      proximo = seq[idx];
+    }
+    document.getElementById("sequenciaAtual").textContent = proximo.toUpperCase();
+  </script>
+</body>
+</html>

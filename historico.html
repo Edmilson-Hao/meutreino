@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Histórico - Gorilla Gang</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="icon" href="gorila.png" type="image/png">
+</head>
+<body>
+  <div class="container">
+    <h1>HISTÓRICO & PROGRESSÃO</h1>
+    <a href="index.html" class="btn-voltar">← VOLTAR</a>
+
+    <div class="card">
+        <h2>Evolução da Tonelagem por Treino</h2>
+        <div style="margin-bottom: 15px;">
+            <select id="filtroTreino" class="filtro-select">
+            <option value="todos">Todos os treinos</option>
+            <option value="Push">Push</option>
+            <option value="Pull">Pull</option>
+            <option value="Legs">Legs</option>
+            <option value="Ombro">Ombro</option>
+            <option value="Braço">Braço</option>
+            </select>
+        </div>
+        <canvas id="graficoTonelagem"></canvas>
+    </div>
+
+<div class="card">
+    <h2>Tonelagem por Grupo Muscular</h2>
+    <select id="selectGrupo" style="margin-bottom: 15px;">
+        <option value="deltoide-lateral">Deltoide Lateral</option>
+        <option value="deltoide-frontal">Deltoide Frontal</option>
+        <option value="deltoide-posterior">Deltoide Posterior</option>   <!-- NOVA OPÇÃO -->
+        <option value="biceps">Bíceps</option>
+        <option value="triceps">Tríceps</option>
+        <option value="peito">Peito</option>
+        <option value="costas">Costas</option>
+        <option value="quadriceps">Quadríceps</option>
+        <option value="posteriores">Posteriores de Coxa</option>
+        <option value="panturrilha">Panturrilha</option>
+    </select>
+    <canvas id="graficoGrupo"></canvas>
+</div>
+
+    <div class="card">
+      <h2>Últimos treinos realizados</h2>
+      <div id="listaTreinos"></div>
+    </div>
+  </div>
+
+  <script src="historico.js"></script>
+</body>
+</html>

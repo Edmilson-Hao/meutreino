@@ -1,0 +1,286 @@
+:root {
+  --bg: #0B0E17;           /* preto-azul profundo */
+  --card: #12151E;         /* card quase preto */
+  --card-hover: #181C2A;   /* hover sutil */
+  --text: #D8DEE9;         /* branco sujo nórdico */
+  --text-sec: #88A0B8;     /* cinza-azul claro */
+  --accent: #00D4FF;       /* CIANO GELADO (substitui o verde) */
+  --accent-dark: #00A8CC;
+  --border: #23283A;
+  --input-bg: #1E2233;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  padding: 16px;
+  line-height: 1.5;
+}
+
+/* ==================== HEADER ==================== */
+header { text-align: center; margin-bottom: 40px; }
+h1 {
+  color: var(--accent);
+  font-size: 3.8rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+  margin-bottom: 8px;
+}
+
+.hoje { 
+  font-size: 1.35rem; 
+  color: var(--text-sec); 
+  margin: 10px 0;
+  text-transform: capitalize;
+}
+.treino-nome { 
+  font-size: 3.2rem; 
+  color: var(--accent); 
+  text-transform: uppercase; 
+  font-weight: 900; 
+  letter-spacing: 4px;
+}
+
+/* ==================== EXERCÍCIOS ==================== */
+.exercicio-item {
+  background: var(--card);
+  margin: 18px 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  transition: all 0.4s ease;
+}
+
+.exercicio-header {
+  padding: 24px;
+  background: linear-gradient(135deg, #131722, #191d2b);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.exercicio-header:hover {
+  background: var(--card-hover);
+  padding-left: 32px;
+}
+
+.exercicio-header::after {
+  content: "▼";
+  color: var(--accent);
+  font-size: 1rem;
+  transition: transform 0.4s ease;
+}
+
+.exercicio-header.open::after {
+  transform: rotate(180deg);
+}
+
+.exercicio-header > div:first-child > div:first-child {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.exercicio-header small {
+  color: var(--text-sec);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* ==================== SÉRIES ==================== */
+.series-container {
+  padding: 0 24px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), padding 0.6s ease;
+  background: #0e111a;
+}
+
+.series-container.open {
+  max-height: 1200px;
+  padding: 28px 24px;
+}
+
+.serie {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--input-bg);
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: bold;
+  margin: 8px 8px 8px 0;
+  min-width: 210px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.serie span {
+  color: var(--text-sec);
+  min-width: 50px;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+input {
+  width: 84px;
+  padding: 10px 8px;
+  background: #1e2235;
+  border: 2px solid #2a2f44;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgba(0, 212, 255, 0.5);
+  background: #252938;
+}
+
+input::placeholder {
+  color: #556;
+  font-weight: normal;
+}
+
+.checkmark { 
+  color: var(--accent); 
+  font-size: 1.9rem; 
+  font-weight: bold;
+  margin-left: 12px;
+  text-shadow: 0 0 12px rgba(0, 212, 255, 0.7);
+}
+
+/* ==================== BOTÃO CONCLUIR ==================== */
+#btnConcluir {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 18px 48px;
+  font-weight: 900;
+  font-size: 1.4rem;
+  border-radius: 14px;
+  cursor: pointer;
+  display: block;
+  margin: 60px auto 30px;
+  box-shadow: 0 0 40px rgba(0, 212, 255, 0.6);
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+#btnConcluir:hover {
+  transform: translateY(-5px) scale(1.06);
+  background: #00e8ff;
+  box-shadow: 0 15px 50px rgba(0, 212, 255, 0.9);
+}
+
+/* ==================== MENU E HISTÓRICO ==================== */
+.center { text-align: center; padding-top: 80px; }
+.menu { margin: 60px 0; }
+.btn-menu {
+  display: block; 
+  width: 90%; 
+  max-width: 500px; 
+  margin: 20px auto;
+  padding: 22px; 
+  background: var(--accent); 
+  color: black; 
+  text-align: center;
+  font-size: 1.6rem; 
+  font-weight: 900; 
+  border-radius: 16px; 
+  text-decoration: none;
+  box-shadow: 0 0 35px rgba(0, 212, 255, 0.5);
+  transition: all 0.3s;
+}
+.btn-menu:hover { transform: scale(1.05); }
+.btn-menu.secundario { 
+  background: var(--card-hover); 
+  color: var(--accent); 
+  border: 2px solid var(--accent);
+}
+
+.card { 
+  background: var(--card); 
+  padding: 28px; 
+  border-radius: 16px; 
+  margin: 20px 0; 
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+}
+.treino-item { 
+  padding: 18px; 
+  background: var(--card-hover); 
+  margin: 12px 0; 
+  border-radius: 12px; 
+  display: flex; 
+  justify-content: space-between;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+/* ==================== DROPDOWNS ==================== */
+select, .filtro-select {
+  width: 100%;
+  padding: 16px 20px;
+  background: var(--card-hover);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2300D4FF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 18px;
+  padding-right: 50px !important;
+  transition: all 0.3s ease;
+}
+
+select:hover, .filtro-select:hover,
+select:focus, .filtro-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  background-color: #1e2235;
+}
+
+select option {
+  background: var(--card);
+  color: var(--text-dessus);
+}
+
+/* Gráficos */
+canvas {
+  border-radius: 16px;
+  background: var(--card);
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px solid var(--border);
+}
+
+/* ==================== RESPONSIVO ==================== */
+@media (max-width: 480px) {
+  h1 { font-size: 2.9rem; }
+  .treino-nome { font-size: 2.5rem; }
+  .exercicio-header > div:first-child > div:first-child { font-size: 1.35rem; }
+  .serie { min-width: auto; padding: 10px 12px; gap: 8px; }
+  input { width: 68px; font-size: 1rem; }
+  #btnConcluir { padding: 16px 36px; font-size: 1.25rem; }
+  .btn-menu { font-size: 1.4rem; padding: 18px; }
+}
