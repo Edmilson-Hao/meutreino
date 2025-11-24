@@ -6,6 +6,7 @@
   <title>Gorilla Gang - Início</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="gorila.png" type="image/png">
+
   <!-- PWA MANIFEST -->
   <link rel="manifest" href="manifest.json">
   <!-- ÍCONES APPLE (iOS) -->
@@ -15,9 +16,11 @@
   <meta name="theme-color" content="#00FF9D">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Gorilla Gang">
 
   <!-- FORÇA MODO STANDALONE NO IOS -->
-  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
 </head>
 <body>
   <div class="container center">
@@ -48,14 +51,23 @@
     }
     document.getElementById("sequenciaAtual").textContent = proximo.toUpperCase();
   </script>
+  
   <script>
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
+      window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('Gorilla SW registrado!'))
-            .catch(err => console.log('Erro SW:', err));
-        });
+          .then(reg => {
+            console.log('Gorilla SW registrado! 🦍', reg); // Debug
+            reg.addEventListener('updatefound', () => {
+              console.log('Nova versão disponível!');
+            });
+          })
+          .catch(err => {
+            console.error('Erro no SW:', err); // Mostra erro no console
+          });
+      });
     }
   </script>
+
 </body>
 </html>
