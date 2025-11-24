@@ -5,19 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gorilla Gang</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Google Sign-In carregado de forma SÍNCRONA e FORÇADA -->
+  <script src="https://accounts.google.com/gsi/client" onload="googleScriptLoaded()" async></script>
+  
   <style>
-    body { overflow: hidden; margin:0; }
+    body { overflow: hidden; margin:0; background: #0B0D17; }
     .login-container {
       min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 20px; gap: 35px;
       background: radial-gradient(circle at center, #0f1629 0%, #0B0D17 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
-      gap: 30px;
     }
     .gorilla-logo {
       width: 200px;
@@ -26,57 +23,28 @@
     }
     @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
     h1 {
-      font-size: 4.2rem;
-      font-weight: 900;
+      font-size: 4.2rem; font-weight: 900;
       background: linear-gradient(90deg, #00FF9D, #00D68F);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 5px;
-      margin: 0;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      letter-spacing: 5px; margin: 0;
     }
-    .subtitle {
-      color: #778DA9;
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-    }
-    #googleButton {
-      margin: 20px 0;
-    }
+    .subtitle { color: #778DA9; font-size: 1.1rem; margin-bottom: 20px; }
+    
+    /* Botão Google pequeno e elegante */
+    #googleButton { margin: 20px 0; }
+    
     .role-buttons {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
     }
     .role-btn {
-      padding: 14px 32px;
-      font-size: 1.1rem;
-      font-weight: 900;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s;
-      min-width: 160px;
-      border: 2.5px solid;
+      padding: 14px 32px; font-size: 1.1rem; font-weight: 900;
+      border-radius: 50px; cursor: pointer; transition: all 0.3s;
+      min-width: 160px; border: 2.5px solid;
     }
-    .role-btn.aluno {
-      border-color: #00FF9D;
-      color: #00FF9D;
-      background: transparent;
-    }
-    .role-btn.coach {
-      border-color: #FF6B6B;
-      color: #FF6B6B;
-      background: transparent;
-    }
-    .role-btn.active {
-      background: #00FF9D;
-      color: black;
-      transform: scale(1.05);
-    }
-    .role-btn.active.coach {
-      background: #FF6B6B;
-      color: white;
-    }
+    .role-btn.aluno  { border-color: #00FF9D; color: #00FF9D; }
+    .role-btn.coach  { border-color: #FF6B6B; color: #FF6B6B; }
+    .role-btn.active { background: #00FF9D; color: black; transform: scale(1.05); }
+    .role-btn.active.coach { background: #FF6B6B; color: white; }
   </style>
 </head>
 <body>
@@ -88,6 +56,7 @@
     <h1>GORILLA GANG</h1>
     <p class="subtitle">Entre com Google para continuar</p>
 
+    <!-- Botão será inserido aqui pelo JS -->
     <div id="googleButton"></div>
 
     <div class="role-buttons">
@@ -99,6 +68,7 @@
   <script>
     let userRole = 'aluno';
 
+    // Troca de role
     document.querySelectorAll('.role-btn').forEach(btn => {
       btn.onclick = () => {
         document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
@@ -107,37 +77,36 @@
       };
     });
 
-    google.accounts.id.initialize({
-      client_id: '51792422386-ucrtikktkk1vp71bscvtshl0eop7jhmp.apps.googleusercontent.com',
-      callback: response => {
-        const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        const user = {
-          name: payload.name,
-          email: payload.email.toLowerCase(),
-          picture: payload.picture,
-          role: userRole
-        };
-
-        // LIBERA COACH
-        if (['edmilsonhao@gmail.com'].includes(user.email)) {
-          user.role = 'coach';
+    // FORÇA o botão aparecer assim que o script do Google carrega
+    function googleScriptLoaded() {
+      google.accounts.id.initialize({
+        client_id: '51792422386-ucrtikktkk1vp71bscvtshl0eop7jhmp.apps.googleusercontent.com',
+        callback: response => {
+          const payload = JSON.parse(atob(response.credential.split('.')[1]));
+          const user = {
+            name: payload.name,
+            email: payload.email.toLowerCase(),
+            picture: payload.picture,
+            role: userRole
+          };
+          if (user.email === 'edmilsonhao@gmail.com') user.role = 'coach';
+          localStorage.setItem('gorillaUser', JSON.stringify(user));
+          location.href = 'index.html';
         }
+      });
 
-        localStorage.setItem('gorillaUser', JSON.stringify(user));
-        location.href = 'index.html';
-      }
-    });
+      // Renderiza o botão com opções perfeitas
+      google.accounts.id.renderButton(document.getElementById('googleButton'), {
+        type: "standard",
+        theme: "filled_blue",
+        size: "large",
+        text: "continue_with",
+        shape: "pill",
+        width: 300
+      });
+    }
 
-    google.accounts.id.renderButton(document.getElementById('googleButton'), {
-      type: "standard",
-      theme: "filled_blue",
-      size: "large",
-      text: "continue_with",
-      shape: "pill",
-      width: 300
-    });
-
-    // Auto-login
+    // Auto-login se já estiver logado
     if (localStorage.getItem('gorillaUser')) {
       location.href = 'index.html';
     }
