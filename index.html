@@ -55,19 +55,17 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
+        navigator.serviceWorker.register('/meutreino/sw.js', { scope: '/meutreino/' })
           .then(reg => {
-            console.log('Gorilla SW registrado! 🦍', reg); // Debug
-            reg.addEventListener('updatefound', () => {
-              console.log('Nova versão disponível!');
-            });
+            console.log('Gorilla SW registrado com sucesso! 🦍 Scope: /meutreino/', reg);
           })
           .catch(err => {
-            console.error('Erro no SW:', err); // Mostra erro no console
+            console.error('Erro no SW (verifique 404):', err);
           });
       });
     }
   </script>
 
 </body>
+
 </html>
