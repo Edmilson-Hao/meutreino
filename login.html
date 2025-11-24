@@ -19,11 +19,12 @@
     }
     .logo-login {
       width: 180px;
+      height: auto;
       filter: drop-shadow(0 0 20px rgba(0,255,157,0.6));
     }
     .google-btn {
-      background: #33384a;
-      border: 2px solid #00FF9D;
+      background: #4285F4;
+      border: none;
       color: white;
       padding: 16px 32px;
       border-radius: 12px;
@@ -34,11 +35,16 @@
       align-items: center;
       gap: 12px;
       transition: all 0.3s;
+      width: 300px;
+      justify-content: center;
     }
     .google-btn:hover {
-      background: #00FF9D;
-      color: black;
+      background: #3367D6;
       transform: scale(1.05);
+    }
+    .google-btn img {
+      width: 20px;
+      height: 20px;
     }
     .role-selector {
       display: flex;
@@ -60,12 +66,18 @@
       color: #00FF9D;
       background: rgba(0,255,157,0.1);
     }
+    .error-msg {
+      color: #FF6B6B;
+      font-size: 0.9rem;
+      text-align: center;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
 
   <div class="login-container">
-    <img src="gorilla-512.png" alt="Gorilla Gang" class="logo-login">
+    <img src="gorilla-512.png" alt="Gorilla Gang" class="logo-login" onerror="this.src='https://i.imgur.com/X2kFZ8p.png';"> <!-- Fallback pro Imgur se local falhar -->
 
     <h1 style="color:#00FF9D; font-size:2.8rem; text-align:center;">
       GORILLA GANG
@@ -76,6 +88,13 @@
     </p>
 
     <div id="googleButton"></div>
+    <p id="errorMsg" class="error-msg" style="display:none;">Erro no login Google. Use o botão abaixo como fallback.</p>
+
+    <!-- FALLBACK BOTÃO MANUAL (se Google falhar) -->
+    <button id="manualLogin" class="google-btn" style="display:none;">
+      <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+      Entrar com Google (Manual)
+    </button>
 
     <div class="role-selector">
       <button class="role-btn active" data-role="aluno">SOU ALUNO</button>
@@ -84,8 +103,9 @@
   </div>
 
   <script>
-    let userRole = 'aluno'; // padrão
+    let userRole = 'aluno'; // Padrão: aluno
 
+    // Role buttons
     document.querySelectorAll('.role-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
@@ -94,9 +114,22 @@
       });
     });
 
-    window.onload = () => {
+    // Google Login
+    function initGoogle() {
+      // <<< AQUI: SUBSTITUA PELO SEU CLIENT ID REAL >>>
+      const CLIENT_ID = '51792422386-ucrtikktkk1vp71bscvtshl0eop7jhmp.apps.googleusercontent.com'; // Ex: '123456789-abc123.apps.googleusercontent.com'
+
+      if (CLIENT_ID === '51792422386-ucrtikktkk1vp71bscvtshl0eop7jhmp.apps.googleusercontent.com') {
+        // Se não configurou ainda, esconde Google e mostra manual
+        document.getElementById('googleButton').style.display = 'none';
+        document.getElementById('manualLogin').style.display = 'flex';
+        document.getElementById('errorMsg').style.display = 'block';
+        document.getElementById('errorMsg').textContent = 'Configure o Client ID no código para ativar Google Login.';
+        return;
+      }
+
       google.accounts.id.initialize({
-        client_id: '51792422386-ucrtikktkk1vp71bscvtshl0eop7jhmp.apps.googleusercontent.com', // <<<<< COLOQUE AQUI DEPOIS
+        client_id: CLIENT_ID,
         callback: handleCredentialResponse
       });
 
@@ -104,32 +137,49 @@
         document.getElementById("googleButton"),
         { theme: "outline", size: "large", text: "continue_with", width: 300 }
       );
-    };
+    }
 
     function handleCredentialResponse(response) {
-      const data = JSON.parse(atob(response.credential.split('.')[1]));
-      const userData = {
-        name: data.name,
-        email: data.email,
-        picture: data.picture,
+      try {
+        const data = JSON.parse(atob(response.credential.split('.')[1]));
+        const userData = {
+          name: data.name,
+          email: data.email,
+          picture: data.picture,
+          role: userRole,
+          loginTime: Date.now()
+        };
+
+        // LIBERA COACH (troque pelo seu email real)
+        if (data.email === 'seuemail@gmail.com') {  // <<< AQUI: SEU EMAIL >>>
+          userData.role = 'coach';
+        }
+
+        localStorage.setItem('gorillaUser', JSON.stringify(userData));
+        location.href = 'index.html';
+      } catch (err) {
+        console.error('Erro no login:', err);
+        document.getElementById('errorMsg').style.display = 'block';
+      }
+    }
+
+    // Fallback manual (simula login sem Google - pra teste)
+    document.getElementById('manualLogin').addEventListener('click', () => {
+      const fakeUser = {
+        name: userRole === 'coach' ? 'Edmilson Coach' : 'Aluno Teste',
+        email: userRole === 'coach' ? 'seuemail@gmail.com' : 'aluno@teste.com',
+        picture: 'https://i.imgur.com/X2kFZ8p.png',
         role: userRole,
         loginTime: Date.now()
       };
-
-      // SALVA NO LOCALSTORAGE
-      localStorage.setItem('gorillaUser', JSON.stringify(userData));
-
-      // COACH LIBERADO (seu email)
-      if (data.email === 'edmilson@coach.com' || data.email === 'seuemail@gmail.com') {
-        userData.role = 'coach';
-        localStorage.setItem('gorillaUser', JSON.stringify(userData));
-      }
-
-      // Redireciona
+      localStorage.setItem('gorillaUser', JSON.stringify(fakeUser));
       location.href = 'index.html';
-    }
+    });
 
-    // AUTO-LOGIN SE JÁ ESTIVER LOGADO
+    // Carrega Google quando a página carrega
+    window.addEventListener('load', initGoogle);
+
+    // AUTO-LOGIN SE JÁ LOGADO
     if (localStorage.getItem('gorillaUser')) {
       location.href = 'index.html';
     }
