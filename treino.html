@@ -7,7 +7,11 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+  <script>
+    if (!localStorage.getItem('gorillaUser')) {
+      location.href = 'login.html';
+    }
+  </script>
   <header>
     <h1>GORILLA GANG</h1>
     <div class="hoje" id="dataHoje"></div>

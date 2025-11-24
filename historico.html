@@ -18,6 +18,11 @@
 
 </head>
 <body>
+  <script>
+    if (!localStorage.getItem('gorillaUser')) {
+      location.href = 'login.html';
+    }
+  </script>
   <div class="container">
     <h1>HISTÓRICO & PROGRESSÃO</h1>
     <a href="index.html" class="btn-voltar">← VOLTAR</a>

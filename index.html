@@ -17,7 +17,9 @@
 
 </head>
 <body>
-  <div class="container center">
+  
+  <div id="protectedContent" style="display:none;">
+    <div class="container center">
     <h1>GORILLA GANG</h1>
     <div class="hoje" id="dataHoje"></div>
 
@@ -30,6 +32,46 @@
       <p>Sequência atual: <strong id="sequenciaAtual">Carregando...</strong></p>
     </div>
   </div>
+  
+    <div class="container center">
+      <h1>GORILLA GANG</h1>
+      <div class="hoje" id="dataHoje"></div>
+      <div class="menu">
+        <a href="treino.html" class="btn-menu">INICIAR TREINO DO DIA</a>
+        <a href="historico.html" class="btn-menu secundario">VER HISTÓRICO E PROGRESSÃO</a>
+      </div>
+      <div class="footer">
+        <p>Sequência atual: <strong id="sequenciaAtual">Carregando...</strong></p>
+      </div>
+    </div>
+
+    <!-- SEU SCRIPT ANTIGO DO INDEX -->
+    <script>
+      // ... seu script antigo aqui ...
+    </script>
+  </div>
+
+  <script>
+    // PROTEGE A PÁGINA
+    const user = JSON.parse(localStorage.getItem('gorillaUser') || 'null');
+    if (!user) {
+      location.href = 'login.html';
+    } else {
+      document.getElementById('protectedContent').style.display = 'block';
+      
+      // Mostra nome do aluno no topo (opcional)
+      document.querySelector('h1').insertAdjacentHTML('afterend', 
+        `<p style="color:#00FF9D; margin:10px 0;">Olá, ${user.name.split(' ')[0]}! 💪</p>`
+      );
+
+      // Se for coach, mostra botão extra (exemplo)
+      if (user.role === 'coach') {
+        document.querySelector('.menu').insertAdjacentHTML('afterbegin', 
+          '<a href="coach.html" class="btn-menu" style="background:#FF6B6B;">ÁREA DO COACH</a>'
+        );
+      }
+    }
+  </script>
 
   <script>
     document.getElementById("dataHoje").textContent = new Date().toLocaleDateString('pt-BR', {
